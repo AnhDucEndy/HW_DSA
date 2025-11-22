@@ -1,1 +1,97 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <algorithm>
+#include <iomanip>
 
+using namespace std;
+
+struct Student {
+    string Hoten;
+    string MSSV;
+    int dob;
+    float gpa;
+
+    Student(string name, string id, int year, float score)
+        : Hoten(name), MSSV(id), dob(year), gpa(score) {}
+};
+
+void printStudentList(const vector<Student>& students) {
+    if (students.empty()) {
+        cout << " Danh sách sinh viên đang trống.\n";
+        return;
+    }
+
+    cout << "\n Danh sách Thông tin Sinh viên \n";
+    cout << left << setw(20) << "Họ tên"
+         << setw(10) << "MSSV"
+         << setw(10) << "Năm sinh"
+         << setw(5) << "GPA" << endl;
+    cout << fixed << setprecision(2);
+    
+    for (const auto& s : students) {
+        cout << left << setw(20) << s.Hoten
+             << setw(10) << s.MSSV
+             << setw(10) << s.dob
+             << setw(5) << s.gpa << endl;
+    }
+}
+
+int getListLength(const vector<Student>& students) {
+    int length = students.size();
+    cout << "\n Danh sách có:" << length << " sinh viên.\n";
+    return length;
+}
+
+int countGPA(const vector<Student>& students, float threshold) {
+    int count = 0;
+    for (const auto& s : students) {
+        if (s.gpa > threshold) {
+            count++;
+        }
+    }
+
+    cout << "\n Số lượng sinh viên có GPA > " << fixed << setprecision(1) << threshold << " là: " << count << " sinh viên.\n";
+    return count;
+}
+
+void sortAndInsertNewStudent(vector<Student>& students, const Student& newStudent) {
+    cout << "\n Sắp xếp danh sách theo GPA tăng dần \n";
+    sort(students.begin(), students.end(), [](const Student& a, const Student& b) {
+        return a.gpa < b.gpa;
+    });
+    printStudentList(students);
+
+    cout << "Thêm sinh viên mới: Tên: " << newStudent.Hoten << ", GPA: " << fixed << setprecision(2) << newStudent.gpa;
+    
+    auto it = upper_bound(students.begin(), students.end(), newStudent,
+        [](const Student& newS, const Student& currentS) {
+            return newS.gpa < currentS.gpa;
+        });
+
+    students.insert(it, newStudent);
+    
+    cout << "\n Danh sách sau khi thêm sinh viên mới \n";
+}
+
+int main() {
+    vector<Student> studentList = {
+        Student("Nguyễn Anh Đức", "SV001", 2006, 4.0f),
+    };
+    cout << " Danh sách sinh viên đã được khởi tạo với dữ liệu mẫu.\n";
+
+    printStudentList(studentList);
+
+    getListLength(studentList);
+
+    float threshold = 3.2f;
+    countGPA(studentList, threshold);
+
+    float newGpa = 2.4f;
+    Student newStudent("Chu Vinh Khánh", "8910JQK", 2006, newGpa);
+    
+    sortAndInsertNewStudent(studentList, newStudent);
+    printStudentList(studentList);
+
+    return 0;
+}
