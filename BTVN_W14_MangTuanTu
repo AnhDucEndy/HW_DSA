@@ -1,0 +1,49 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+struct SequentialTree {
+    int capacity;
+    vector<int> tree;
+    vector<bool> hasData;
+
+    SequentialTree(int size) {
+        capacity = size;
+        tree.assign(size, 0);
+        hasData.assign(size, false);
+    }
+
+    bool isEmpty() {
+        return !hasData[0];
+    }
+
+    void setNode(int index, int value) {
+        if (index >= capacity) {
+            cout << "Loi: Vuot qua dung luong mang!" << endl;
+            return;
+        }
+        tree[index] = value;
+        hasData[index] = true;
+    }
+
+    void inOrder(int index) {
+        if (index >= capacity || !hasData[index]) return;
+
+        inOrder(2 * index + 1);
+        cout << tree[index] << " ";
+        inOrder(2 * index + 2);  
+    }
+};
+
+int main() {
+    SequentialTree myTree(15); 
+    
+    myTree.setNode(0, 10);      
+    myTree.setNode(1, 5);    
+    myTree.setNode(2, 20);   
+    
+    cout << "Duyet trung tu: ";
+    myTree.inOrder(0);
+    return 0;
+}
