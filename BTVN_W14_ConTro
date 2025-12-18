@@ -1,0 +1,71 @@
+#include <iostream>
+using namespace std;
+
+struct Node {
+    int data;
+    Node *left;
+    Node *right;
+
+    Node(int val) {
+        data = val;
+        left = right = nullptr;
+    }
+};
+
+struct BinaryTree {
+    Node* root;
+
+    BinaryTree() { root = nullptr; }
+
+    bool isEmpty() { return root == nullptr; }
+
+    Node* insertRoot(int val) {
+        root = new Node(val);
+        return root;
+    }
+
+    void insertLeft(Node* parent, int val) {
+        if (parent) parent->left = new Node(val);
+    }
+
+    void insertRight(Node* parent, int val) {
+        if (parent) parent->right = new Node(val);
+    }
+
+    // 4. Cac thu tuc duyet
+    void duyetTruoc(Node* node) {
+        if (!node) return;
+        cout << node->data << " ";
+        duyetTruoc(node->left);   
+        duyetTruoc(node->right);  
+    }
+
+    void duyetGiua(Node* node) {
+        if (!node) return;
+        duyetGiua(node->left);
+        cout << node->data << " ";
+        duyetGiua(node->right);
+    }
+
+    void duyetSau(Node* node) {
+        if (!node) return;
+        duyetSau(node->left);
+        duyetSau(node->right);
+        cout << node->data << " ";
+    }
+};
+
+int main() {
+    BinaryTree t;
+    
+    Node* goc = t.insertRoot(1);
+    t.insertLeft(goc, 2);
+    t.insertRight(goc, 3);
+    t.insertLeft(goc->left, 4);
+
+    cout << "Tien tu: "; t.duyetTruoc(t.root); cout << endl;
+    cout << "Trung tu: "; t.duyetGiua(t.root); cout << endl;
+    cout << "Hau tu: "; t.duyetSau(t.root); cout << endl;
+
+    return 0;
+}
